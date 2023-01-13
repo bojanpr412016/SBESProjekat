@@ -12,5 +12,21 @@ namespace Common
     {
         [OperationContract]
         void testMessage();
+        
+        [OperationContract]
+        void dodajPredstavu(Predstava predstava);
+
+        [OperationContract]
+        void izmeniPredstavu(Predstava predstava);
+
+        [OperationContract]
+        void izmeniPopust();
+
+        [OperationContract]
+        void napraviRezervaciju(Rezervacija rezervacija);
+
+        [OperationContract]
+        void platiRezervaciju(Rezervacija rezervacija);
+
     }
 }

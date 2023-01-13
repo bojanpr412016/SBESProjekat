@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +53,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CertificationManager\CertificationManager.csproj">
+      <Project>{1A045003-65AB-4EAF-A1D9-75DCEBF8C576}</Project>
+      <Name>CertificationManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{28321897-3ebd-4442-9f89-00793f5abe8b}</Project>
       <Name>Common</Name>

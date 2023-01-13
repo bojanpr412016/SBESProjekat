@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CertificationManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -11,27 +12,26 @@ namespace User
 {
     public class Program
     {
-        static void Main(string[] args)
-        {
-            NetTcpBinding binding = new NetTcpBinding();
-            string address = "net.tcp://localhost:9999/SecurityService";
+		static void Main(string[] args)
+		{
+		/// Define the expected service certificate. It is required to establish cmmunication using certificates.
+			string srvCertCN = "WCFService";
 
-            binding.Security.Mode = SecurityMode.Transport;
-            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
-            binding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign;
+			NetTcpBinding binding = new NetTcpBinding();
+			binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
 
-            Console.WriteLine("Korisnik koji je pokrenuo klijenta je : " + WindowsIdentity.GetCurrent().Name);
+			/// Use CertManager class to obtain the certificate based on the "srvCertCN" representing the expected service identity.
+			X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
+			EndpointAddress address = new EndpointAddress(new Uri("net.tcp://localhost:9999/Receiver"),
+									  new X509CertificateEndpointIdentity(srvCert));
 
-            EndpointAddress endpointAddress = new EndpointAddress(new Uri(address),
-                EndpointIdentity.CreateUpnIdentity("wcfServer"));
-
-            using (User proxy = new User(binding, endpointAddress))
-            {
-                proxy.testMessage();
-                proxy.testMessage();
-            }
-
-            Console.ReadLine();
-        }
-    }
+			using (User proxy = new User(binding, address))
+			{
+				/// 1. Communication test
+				//proxy.TestCommunication();
+				Console.WriteLine("TestCommunication() finished. Press <enter> to continue ...");
+				Console.ReadLine();
+			}
+		}
+	}
 }
